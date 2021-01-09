@@ -1,19 +1,21 @@
-var hmac = require("crypto").createHmac,
-	https = require('https');
+import { createHmac as hmac } from "crypto";
+import { request as _request } from 'https';
 
-function coinspot(key, secret) {
-  	var self = this;
-  	self.key = key;
-  	self.secret = secret;
+class coinspot {
 
-	var request = function(path, postdata, callback) {
+	constructor(key, secret) {
+		this.key = key;
+  		this.secret = secret;
+	}
+
+	request = function(path, postdata, callback) {
 		var nonce = new Date().getTime();
 
 		var postdata = postdata || {};
 		postdata.nonce = nonce;
 
 		var stringmessage = JSON.stringify(postdata);
-		var signedMessage = new hmac("sha512", self.secret);
+		var signedMessage = hmac("sha512", this.secret);
 
 		signedMessage.update(stringmessage);
 
@@ -28,11 +30,11 @@ function coinspot(key, secret) {
 			headers: {
 				'Content-Type': 'application/json',
 				'sign': sign,
-				'key': self.key
+				'key': this.key
 			}
 		};
 
-		var req = https.request(options, function(resp){
+		var req = _request(options, function(resp){
 			var data = '';
 			resp.on('data', function(chunk){
 				data += chunk;
@@ -48,47 +50,67 @@ function coinspot(key, secret) {
 		req.end();
 	}
 
-	self.sendcoin = function(cointype, amount, address, callback) {
-		request('/api/my/coin/send', {cointype:cointype, amount:amount, address:address}, callback);
-	}
+	/* ---------------------
+		Main API requests
+	--------------------- */
 
-	self.coindeposit = function(cointype, callback) {
-		request('/api/my/coin/deposit', {cointype:cointype}, callback);
-	}
-
-	self.quotebuy = function(cointype, amount, callback) {
-		request('/api/quote/buy', {cointype:cointype, amount:amount}, callback);
-	}
-
-	self.quotesell = function(cointype, amount, callback) {
-		request('/api/quote/sell', {cointype:cointype, amount:amount}, callback);
-	}
-
-	self.balances = function(callback) {
-		request('/api/my/balances', {}, callback);
-	}
-
-	self.orders = function(cointype, callback) {
+	orders = function(cointype, callback) {
 		request('/api/orders', {cointype:cointype}, callback);
 	}
 
-	self.myorders = function(callback) {
+	ordersHistory = function(cointype, callback) {
+		request('/api/orders/history', {cointype:cointype}, callback);
+	}
+
+	coindeposit = function(cointype, callback) {
+		request('/api/my/coin/deposit', {cointype:cointype}, callback);
+	}
+
+	// Removed from API not sure if still works
+	sendcoin = function(cointype, amount, address, callback) {
+		request('/api/my/coin/send', {cointype:cointype, amount:amount, address:address}, callback);
+	}
+
+	quotebuy = function(cointype, amount, callback) {
+		request('/api/quote/buy', {cointype:cointype, amount:amount}, callback);
+	}
+
+	quotesell = function(cointype, amount, callback) {
+		request('/api/quote/sell', {cointype:cointype, amount:amount}, callback);
+	}
+
+	balances = function(callback) {
+		request('/api/my/balances', {}, callback);
+	}
+
+	myorders = function(callback) {
 		request('/api/my/orders', {}, callback);
 	}
 
-	self.spot = function(callback) {
-		request('/api/spot', {}, callback);
-	}
-
-	self.buy = function(cointype, amount, rate, callback) {
+	buy = function(cointype, amount, rate, callback) {
 		var data = {cointype:cointype, amount:amount, rate: rate}
 		request('/api/my/buy', data, callback);
 	}
 
-	self.sell = function(cointype, amount, rate, callback) {
+	sell = function(cointype, amount, rate, callback) {
 		var data = {cointype:cointype, amount:amount, rate: rate}
 		request('/api/my/sell', data, callback);
 	}
+
+	cancelBuy = function(id, callback) {
+		var data = {id:id}
+		request('/api/my/buy/cancel', data, callback);
+	}
+
+	cancelSell = function(id, callback) {
+		var data = {id:id}
+		request('/api/my/sell/cancel', data, callback);
+	}
+
+	// Cant find this in the API
+	spot = function(callback) {
+		request('/api/spot', {}, callback);
+	}
 }
 
-module.exports = coinspot;
+export default coinspot;

@@ -12,9 +12,13 @@ declare module 'coinspot-api' {
 
         request (path : string, postdata : any, callback : ICallBack) : void;
 
-        sendcoin (cointype : string, amount : number, address : string, callback : ICallBack) : void;
+        orders (cointype : string, callback : ICallBack) : void;
+
+        ordersHistory (cointype : string, callback : ICallBack) : void;
 
         coindeposit (cointype : string, callback : ICallBack) : void;
+
+        sendcoin (cointype : string, amount : number, address : string, callback : ICallBack) : void;
 
         quotebuy (cointype : string, amount : number, callback : ICallBack) : void;
 
@@ -22,14 +26,16 @@ declare module 'coinspot-api' {
 
         balances (callback : ICallBack) : void;
 
-        orders (cointype : string, callback : ICallBack) : void;
-
         myorders (callback : ICallBack) : void;
-
-        spot (callback : ICallBack) : void;
 
         buy (cointype : string, amount : number, rate : number, callback : ICallBack) : void;
 
         sell (cointype : string, amount : number, rate : number, callback : ICallBack) : void;
+
+        cancelBuy (id : number, callback : ICallBack) : void;
+
+        cancelSell (id : number, callback : ICallBack) : void;
+
+        spot (callback : ICallBack) : void;
     }
 }
