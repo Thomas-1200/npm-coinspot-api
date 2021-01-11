@@ -10,11 +10,11 @@ declare module 'coinspot-api' {
      * @param readonlySecret
     */
     class coinspot {
-        constructor(key : string | null, secret : string | null, readonlyKey : string | null, readonlySecret : string | null);
+        constructor(key? : string | null, secret? : string | null, readonlyKey? : string | null, readonlySecret? : string | null);
 
         checkPath (path : string) : boolean;
 
-        request (path : string, postdata : any, callback : ICallBack, useReadonly : boolean, cointype : string | null) : void;
+        request (path : string, postdata : any, callback : ICallBack, useReadonly? : boolean, cointype? : string | null) : void;
 
         latestPrices (callback : ICallBack) : void
 
@@ -48,13 +48,13 @@ declare module 'coinspot-api' {
 
         readonlyCoinBalance (cointype : string, callback : ICallBack) : void;
 
-        readonlyDepositHistory (startDate : string, endDate : string, callback : ICallBack) : void;
+        readonlyDepositHistory (startDate? : string, endDate? : string, callback : ICallBack) : void;
 
-        readonlyWithdrawalHistory (startDate : string, endDate : string, callback : ICallBack) : void;
+        readonlyWithdrawalHistory (startDate? : string, endDate? : string, callback : ICallBack) : void;
 
-        readonlyTransactionHistory (startDate : string, endDate : string, callback : ICallBack) : void;
+        readonlyTransactionHistory (startDate? : string, endDate? : string, callback : ICallBack) : void;
 
-        readonlyCoinTransactionHistory (startDate : string, endDate : string, cointype : string, callback : ICallBack) : void;
+        readonlyCoinTransactionHistory (startDate? : string, endDate? : string, cointype : string, callback : ICallBack) : void;
 
         readonlyOpenTransactions (callback : ICallBack) : void;
 
