@@ -56,7 +56,7 @@ class Coinspot {
 		return false
 	}
 
-	request (path, postdata, callback, useReadonly = false, cointype = null) {
+	request (path, postdata = {}, callback, useReadonly = false, cointype = null) {
 
 		if (!this.checkPath(path)) {
 			throw `Path is not valid or you do not have the required access to execute this request: ${path}. See https://coinspot.com.au/api for more details.`;
@@ -68,7 +68,6 @@ class Coinspot {
 
 		let nonce = new Date().getTime();
 
-		let postdata = postdata || {};
 		postdata.nonce = nonce;
 
 		let stringmessage = JSON.stringify(postdata);
