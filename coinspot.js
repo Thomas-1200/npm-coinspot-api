@@ -144,7 +144,7 @@ export class Coinspot {
 	--------------------- */
 
 	latestPrices (callback) {
-		request('/pubapi/latest', {}, callback);
+		this.request('/pubapi/latest', {}, callback);
 	}
 
 	/* ---------------------
@@ -152,61 +152,61 @@ export class Coinspot {
 	--------------------- */
 
 	orders (cointype, callback) {
-		request('/api/orders', {cointype:cointype}, callback);
+		this.request('/api/orders', {cointype:cointype}, callback);
 	}
 
 	ordersHistory (cointype, callback) {
-		request('/api/orders/history', {cointype:cointype}, callback);
+		this.request('/api/orders/history', {cointype:cointype}, callback);
 	}
 
 	coindeposit (cointype, callback) {
-		request('/api/my/coin/deposit', {cointype:cointype}, callback);
+		this.request('/api/my/coin/deposit', {cointype:cointype}, callback);
 	}
 
 	// Removed from API not sure if still works
 	sendcoin (cointype, amount, address, callback) {
-		request('/api/my/coin/send', {cointype:cointype, amount:amount, address:address}, callback);
+		this.request('/api/my/coin/send', {cointype:cointype, amount:amount, address:address}, callback);
 	}
 
 	quotebuy (cointype, amount, callback) {
-		request('/api/quote/buy', {cointype:cointype, amount:amount}, callback);
+		this.request('/api/quote/buy', {cointype:cointype, amount:amount}, callback);
 	}
 
 	quotesell (cointype, amount, callback) {
-		request('/api/quote/sell', {cointype:cointype, amount:amount}, callback);
+		this.request('/api/quote/sell', {cointype:cointype, amount:amount}, callback);
 	}
 
 	balances (callback) {
-		request('/api/my/balances', {}, callback);
+		this.request('/api/my/balances', {}, callback);
 	}
 
 	myorders (callback) {
-		request('/api/my/orders', {}, callback);
+		this.request('/api/my/orders', {}, callback);
 	}
 
 	buy (cointype, amount, rate, callback) {
 		var data = {cointype:cointype, amount:amount, rate: rate}
-		request('/api/my/buy', data, callback);
+		this.request('/api/my/buy', data, callback);
 	}
 
 	sell (cointype, amount, rate, callback) {
 		var data = {cointype:cointype, amount:amount, rate: rate}
-		request('/api/my/sell', data, callback);
+		this.request('/api/my/sell', data, callback);
 	}
 
 	cancelBuy (id, callback) {
 		var data = {id:id}
-		request('/api/my/buy/cancel', data, callback);
+		this.request('/api/my/buy/cancel', data, callback);
 	}
 
 	cancelSell (id, callback) {
 		var data = {id:id}
-		request('/api/my/sell/cancel', data, callback);
+		this.request('/api/my/sell/cancel', data, callback);
 	}
 
 	// Cant find this in the API
 	spot (callback) {
-		request('/api/spot', {}, callback);
+		this.request('/api/spot', {}, callback);
 	}
 
 	/* ---------------------
@@ -214,11 +214,11 @@ export class Coinspot {
 	--------------------- */
 
 	readonlyBalances (callback) {
-		request('/api/ro/my/balances', {}, callback, true);
+		this.request('/api/ro/my/balances', {}, callback, true);
 	}
 
 	readonlyCoinBalance (cointype, callback) {
-		request('/api/ro/my/balances/:cointype', {}, callback, true, cointype);
+		this.request('/api/ro/my/balances/:cointype', {}, callback, true, cointype);
 	}
 
 	readonlyDepositHistory (callback, startDate = null, endDate = null) {
@@ -229,7 +229,7 @@ export class Coinspot {
 		if (endDate) {
 			data.enddate = endDate;
 		}
-		request('/api/ro/my/deposits', data, callback, true);
+		this.request('/api/ro/my/deposits', data, callback, true);
 	}
 
 	readonlyWithdrawalHistory (callback, startDate = null, endDate = null) {
@@ -240,7 +240,7 @@ export class Coinspot {
 		if (endDate) {
 			data.enddate = endDate;
 		}
-		request('/api/ro/my/withdrawals', data, callback, true);
+		this.request('/api/ro/my/withdrawals', data, callback, true);
 	}
 
 	readonlyTransactionHistory (callback, startDate = null, endDate = null) {
@@ -251,7 +251,7 @@ export class Coinspot {
 		if (endDate) {
 			data.enddate = endDate;
 		}
-		request('/api/ro/my/transactions', data, callback, true);
+		this.request('/api/ro/my/transactions', data, callback, true);
 	}
 
 	readonlyCoinTransactionHistory (cointype, callback, startDate = null, endDate = null) {
@@ -262,27 +262,27 @@ export class Coinspot {
 		if (endDate) {
 			data.enddate = endDate;
 		}
-		request('/api/ro/my/transactions/:cointype', data, callback, true, cointype);
+		this.request('/api/ro/my/transactions/:cointype', data, callback, true, cointype);
 	}
 
 	readonlyOpenTransactions (callback) {
-		request('/api/ro/my/transactions/open', {}, callback, true);
+		this.request('/api/ro/my/transactions/open', {}, callback, true);
 	}
 
 	readonlyOpenCoinTransactions (cointype, callback) {
-		request('/api/ro/my/transactions/:cointype/open', {}, callback, true, cointype);
+		this.request('/api/ro/my/transactions/:cointype/open', {}, callback, true, cointype);
 	}
 
 	readonlySendReceiveTransactionHistory (callback) {
-		request('/api/ro/my/sendreceive', {}, callback, true);
+		this.request('/api/ro/my/sendreceive', {}, callback, true);
 	}
 
 	readonlyAffiliatePayments (callback) {
-		request('/api/ro/my/affiliatepayments', {}, callback, true);
+		this.request('/api/ro/my/affiliatepayments', {}, callback, true);
 	}
 
 	readonlyReferralPayments (callback) {
-		request('/api/ro/my/referralpayments', {}, callback, true);
+		this.request('/api/ro/my/referralpayments', {}, callback, true);
 	}
 
 }
