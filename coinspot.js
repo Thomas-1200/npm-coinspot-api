@@ -1,5 +1,5 @@
-var crypto = require('crypto');
-var https = require('https');
+var hmac = require('crypto').createHmac;
+var _request = require('https').request;
 
 export class Coinspot {
 
@@ -88,7 +88,7 @@ export class Coinspot {
 				}
 			}
 		} else if (useReadonly) {
-			signedMessage = crypto.createHmac("sha512", this.readonlySecret);
+			signedMessage = hmac("sha512", this.readonlySecret);
 			signedMessage.update(stringmessage);
 			sign = signedMessage.digest('hex');
 
@@ -105,7 +105,7 @@ export class Coinspot {
 				}
 			};
 		} else {
-			signedMessage = crypto.createHmac("sha512", this.secret);
+			signedMessage = hmac("sha512", this.secret);
 			signedMessage.update(stringmessage);
 			sign = signedMessage.digest('hex');
 
@@ -123,7 +123,7 @@ export class Coinspot {
 			};
 		}
 
-		let req = https.request(options, function(resp){
+		let req = _request(options, function(resp){
 			let data = '';
 			resp.on('data', function(chunk){
 				data += chunk;
