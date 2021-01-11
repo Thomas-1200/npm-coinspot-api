@@ -87,7 +87,7 @@ export class Coinspot {
 					'Content-Type': 'application/json',
 				}
 			}
-		} else if (useReadOnly) {
+		} else if (useReadonly) {
 			signedMessage = hmac("sha512", this.readonlySecret);
 			signedMessage.update(stringmessage);
 			sign = signedMessage.digest('hex');
