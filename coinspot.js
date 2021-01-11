@@ -13,7 +13,7 @@ class Coinspot {
 
 	validPaths = ['/pubapi/latest'];
 
-	constructor(key = null, secret = null, readonlyKey = null, readonlySecret = null) {
+	constructor(key, secret, readonlyKey, readonlySecret) {
 		if (key && secret) {
 			this.key = key;
 			this.secret = secret;
