@@ -9,7 +9,7 @@ declare module 'coinspot-api' {
      * @param readonlyKey
      * @param readonlySecret
     */
-    class coinspot {
+    class Coinspot {
         constructor(key? : string | null, secret? : string | null, readonlyKey? : string | null, readonlySecret? : string | null);
 
         checkPath (path : string) : boolean;

@@ -1,7 +1,7 @@
 import { createHmac as hmac } from "crypto";
 import { request as _request } from 'https';
 
-class coinspot {
+class Coinspot {
 
 	key = null;
 	secret = null;
