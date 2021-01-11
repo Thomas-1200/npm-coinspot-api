@@ -12,14 +12,14 @@
     "coinspot"
   ],
   "author": {
-    "name": "Russell Wilson",
-    "url": "https://github.com/rtw"
+    "name": "Thomas Plunkett",
+    "url": "https://github.com/thomas-1200"
   },
   "contributors": [],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rtw/npm-coinspot-api"
+    "url": "https://github.com/thomas-1200/npm-coinspot-api"
   },
   "main": "coinspot.js",
   "engines": {

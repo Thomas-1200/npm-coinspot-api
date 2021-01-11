@@ -1,10 +1,10 @@
+var crypto = require('crypto');
+var https = require('https');
+
 export class Coinspot {
 
-	crypto = require('crypto');
- 	https = require('https');
-
 	constructor(key, secret, readonlyKey, readonlySecret) {
-		this. validPaths = ['/pubapi/latest'];
+		this.validPaths = ['/pubapi/latest'];
 
 		if (key && secret) {
 			this.key = key;
