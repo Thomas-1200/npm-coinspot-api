@@ -1,5 +1,5 @@
-const  hmac = require("crypto").createHmac
-const _request = require('https').request;
+import { createHmac as hmac } from "crypto";
+import { request as _request } from 'https';
 
 export class Coinspot {
 
