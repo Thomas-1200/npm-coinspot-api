@@ -28,5 +28,9 @@
   "bugs": {
     "url": "https://github.com/rtw/npm-coinspot-api/issues",
     "email": "rtw1981@gmail.com"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "http": "^0.0.1-security"
   }
 }

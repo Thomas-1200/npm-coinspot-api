@@ -1,7 +1,7 @@
 import { createHmac as hmac } from "crypto";
 import { request as _request } from 'https';
 
-class Coinspot {
+export class Coinspot {
 
 	constructor(key, secret, readonlyKey, readonlySecret) {
 		this. validPaths = ['/pubapi/latest'];
@@ -286,5 +286,3 @@ class Coinspot {
 	}
 
 }
-
-export default Coinspot;
