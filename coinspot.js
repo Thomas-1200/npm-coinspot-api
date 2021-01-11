@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const https = require('https');
 
-export class Coinspot {
+class Coinspot {
 
 	constructor(key, secret, readonlyKey, readonlySecret) {
 		this. validPaths = ['/pubapi/latest'];
@@ -286,3 +286,5 @@ export class Coinspot {
 	}
 
 }
+
+module.exports = Coinspot;
