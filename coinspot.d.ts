@@ -14,7 +14,7 @@ declare module 'coinspot-api' {
 
         checkPath (path : string) : boolean;
 
-        request (path : string, postdata : any, callback : ICallBack, useReadonly? : boolean = false, cointype? : string = null) : void;
+        request (path : string, postdata : any, callback : ICallBack, useReadonly? : boolean, cointype? : string) : void;
 
         latestPrices (callback : ICallBack) : void
 
@@ -48,13 +48,13 @@ declare module 'coinspot-api' {
 
         readonlyCoinBalance (cointype : string, callback : ICallBack) : void;
 
-        readonlyDepositHistory (startDate? : string = null, endDate? : string = null, callback : ICallBack) : void;
+        readonlyDepositHistory (callback : ICallBack, startDate? : string, endDate? : string) : void;
 
-        readonlyWithdrawalHistory (startDate? : string = null, endDate? : string = null, callback : ICallBack) : void;
+        readonlyWithdrawalHistory (callback : ICallBack, startDate? : string, endDate? : string) : void;
 
-        readonlyTransactionHistory (startDate? : string = null, endDate? : string = null, callback : ICallBack) : void;
+        readonlyTransactionHistory (callback : ICallBack, startDate? : string, endDate? : string) : void;
 
-        readonlyCoinTransactionHistory (startDate? : string = null, endDate? : string = null, cointype : string, callback : ICallBack) : void;
+        readonlyCoinTransactionHistory (cointype : string, callback : ICallBack, startDate? : string, endDate? : string) : void;
 
         readonlyOpenTransactions (callback : ICallBack) : void;
 

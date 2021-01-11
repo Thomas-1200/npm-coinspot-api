@@ -232,7 +232,7 @@ class Coinspot {
 		request('/api/ro/my/balances/:cointype', {}, callback, true, cointype);
 	}
 
-	readonlyDepositHistory (startDate = null, endDate = null, callback) {
+	readonlyDepositHistory (callback, startDate = null, endDate = null) {
 		let data = {};
 		if (startDate) {
 			data.startdate = startDate;
@@ -243,7 +243,7 @@ class Coinspot {
 		request('/api/ro/my/deposits', data, callback, true);
 	}
 
-	readonlyWithdrawalHistory (startDate = null, endDate = null, callback) {
+	readonlyWithdrawalHistory (callback, startDate = null, endDate = null) {
 		let data = {};
 		if (startDate) {
 			data.startdate = startDate;
@@ -254,7 +254,7 @@ class Coinspot {
 		request('/api/ro/my/withdrawals', data, callback, true);
 	}
 
-	readonlyTransactionHistory (startDate = null, endDate = null, callback) {
+	readonlyTransactionHistory (callback, startDate = null, endDate = null) {
 		let data = {};
 		if (startDate) {
 			data.startdate = startDate;
@@ -265,7 +265,7 @@ class Coinspot {
 		request('/api/ro/my/transactions', data, callback, true);
 	}
 
-	readonlyCoinTransactionHistory (startDate = null, endDate = null, cointype, callback) {
+	readonlyCoinTransactionHistory (cointype, callback, startDate = null, endDate = null) {
 		let data = {};
 		if (startDate) {
 			data.startdate = startDate;
