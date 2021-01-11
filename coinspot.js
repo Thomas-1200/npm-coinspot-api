@@ -298,4 +298,4 @@ class Coinspot {
 
 }
 
-export default coinspot;
+export default Coinspot;
