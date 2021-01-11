@@ -3,39 +3,139 @@ import { request as _request } from 'https';
 
 class coinspot {
 
-	constructor(key, secret) {
-		this.key = key;
-  		this.secret = secret;
+	key = null;
+	secret = null;
+	readonlyKey = null;
+	readonlySecret = null;
+
+	mainAPI = false;
+	ReadonlyAPI = false;
+
+	validPaths = ['/pubapi/latest'];
+
+	constructor(key = null, secret = null, readonlyKey = null, readonlySecret = null) {
+		if (key && secret) {
+			this.key = key;
+			this.secret = secret;
+			mainAPI = true;
+
+			let mainPaths = [
+				'/api/orders',
+				'/api/orders/history',
+				'/api/my/coin/deposit',
+				'/api/my/coin/send',
+				'/api/quote/buy',
+				'/api/quote/sell',
+				'/api/my/balances',
+				'/api/my/orders',
+				'/api/my/buy',
+				'/api/my/sell',
+				'/api/my/buy/cancel',
+				'/api/my/sell/cancel',
+				'/api/spot'
+			];
+			this.validPaths = [...this.validPaths, ...mainPaths];
+		}
+
+		if (readonlyKey && readonlySecret) {
+			this.readonlyKey = readonlyKey;
+			this.readonlySecret = readonlySecret;
+			ReadonlyAPI = true;
+
+			let readonlyPaths = [
+				'/api/ro/my/balances',
+				'/api/ro/my/balances/:cointype',
+				'/api/ro/my/deposits',
+				'/api/ro/my/withdrawals',
+				'/api/ro/my/transactions',
+				'/api/ro/my/transactions/:cointype',
+				'/api/ro/my/transactions/open',
+				'/api/ro/my/transactions/:cointype/open',
+				'/api/ro/my/sendreceive',
+				'/api/ro/my/affiliatepayments',
+				'/api/ro/my/referralpayments'
+			];
+			this.validPaths = [...this.validPaths, ...readonlyPaths];
+		}
 	}
 
-	request = function(path, postdata, callback) {
-		var nonce = new Date().getTime();
+	checkPath (path) {
+		if (this.validPaths.indexOf(path) != -1) {
+			return true;
+		}
+		return false
+	}
 
-		var postdata = postdata || {};
+	request (path, postdata, callback, useReadonly = false, cointype = null) {
+
+		if (!this.checkPath(path)) {
+			throw `Path is not valid or you do not have the required access to execute this request: ${path}. See https://coinspot.com.au/api for more details.`;
+		}
+
+		if (cointype) {
+			path = path.replace('cointype', cointype);
+		}
+
+		let nonce = new Date().getTime();
+
+		let postdata = postdata || {};
 		postdata.nonce = nonce;
 
-		var stringmessage = JSON.stringify(postdata);
-		var signedMessage = hmac("sha512", this.secret);
+		let stringmessage = JSON.stringify(postdata);
 
-		signedMessage.update(stringmessage);
+		let signedMessage;
+		let sign;
+		let options;
 
-		var sign = signedMessage.digest('hex');
-
-		var options = {
-			rejectUnauthorized: false,
-			method: 'POST',
-			host: 'www.coinspot.com.au',
-			port: 443,
-			path: path,
-			headers: {
-				'Content-Type': 'application/json',
-				'sign': sign,
-				'key': this.key
+		if (path === '/pubapi/latest') {
+			options = {
+				rejectUnauthorized: false,
+				method: 'POST',
+				host: 'www.coinspot.com.au',
+				port: 443,
+				path: path,
+				headers: {
+					'Content-Type': 'application/json',
+				}
 			}
-		};
+		} else if (useReadOnly) {
+			signedMessage = hmac("sha512", this.readonlySecret);
+			signedMessage.update(stringmessage);
+			sign = signedMessage.digest('hex');
 
-		var req = _request(options, function(resp){
-			var data = '';
+			options = {
+				rejectUnauthorized: false,
+				method: 'POST',
+				host: 'www.coinspot.com.au',
+				port: 443,
+				path: path,
+				headers: {
+					'Content-Type': 'application/json',
+					'sign': sign,
+					'key': this.readonlyKey
+				}
+			};
+		} else {
+			signedMessage = hmac("sha512", this.secret);
+			signedMessage.update(stringmessage);
+			sign = signedMessage.digest('hex');
+
+			options = {
+				rejectUnauthorized: false,
+				method: 'POST',
+				host: 'www.coinspot.com.au',
+				port: 443,
+				path: path,
+				headers: {
+					'Content-Type': 'application/json',
+					'sign': sign,
+					'key': this.key
+				}
+			};
+		}
+
+		let req = _request(options, function(resp){
+			let data = '';
 			resp.on('data', function(chunk){
 				data += chunk;
 			});
@@ -51,66 +151,151 @@ class coinspot {
 	}
 
 	/* ---------------------
+		Public API requests
+	--------------------- */
+
+	latestPrices (callback) {
+		request('/pubapi/latest', {}, callback);
+	}
+
+	/* ---------------------
 		Main API requests
 	--------------------- */
 
-	orders = function(cointype, callback) {
+	orders (cointype, callback) {
 		request('/api/orders', {cointype:cointype}, callback);
 	}
 
-	ordersHistory = function(cointype, callback) {
+	ordersHistory (cointype, callback) {
 		request('/api/orders/history', {cointype:cointype}, callback);
 	}
 
-	coindeposit = function(cointype, callback) {
+	coindeposit (cointype, callback) {
 		request('/api/my/coin/deposit', {cointype:cointype}, callback);
 	}
 
 	// Removed from API not sure if still works
-	sendcoin = function(cointype, amount, address, callback) {
+	sendcoin (cointype, amount, address, callback) {
 		request('/api/my/coin/send', {cointype:cointype, amount:amount, address:address}, callback);
 	}
 
-	quotebuy = function(cointype, amount, callback) {
+	quotebuy (cointype, amount, callback) {
 		request('/api/quote/buy', {cointype:cointype, amount:amount}, callback);
 	}
 
-	quotesell = function(cointype, amount, callback) {
+	quotesell (cointype, amount, callback) {
 		request('/api/quote/sell', {cointype:cointype, amount:amount}, callback);
 	}
 
-	balances = function(callback) {
+	balances (callback) {
 		request('/api/my/balances', {}, callback);
 	}
 
-	myorders = function(callback) {
+	myorders (callback) {
 		request('/api/my/orders', {}, callback);
 	}
 
-	buy = function(cointype, amount, rate, callback) {
+	buy (cointype, amount, rate, callback) {
 		var data = {cointype:cointype, amount:amount, rate: rate}
 		request('/api/my/buy', data, callback);
 	}
 
-	sell = function(cointype, amount, rate, callback) {
+	sell (cointype, amount, rate, callback) {
 		var data = {cointype:cointype, amount:amount, rate: rate}
 		request('/api/my/sell', data, callback);
 	}
 
-	cancelBuy = function(id, callback) {
+	cancelBuy (id, callback) {
 		var data = {id:id}
 		request('/api/my/buy/cancel', data, callback);
 	}
 
-	cancelSell = function(id, callback) {
+	cancelSell (id, callback) {
 		var data = {id:id}
 		request('/api/my/sell/cancel', data, callback);
 	}
 
 	// Cant find this in the API
-	spot = function(callback) {
+	spot (callback) {
 		request('/api/spot', {}, callback);
 	}
+
+	/* ---------------------
+		Readonly API requests
+	--------------------- */
+
+	readonlyBalances (callback) {
+		request('/api/ro/my/balances', {}, callback, true);
+	}
+
+	readonlyCoinBalance (cointype, callback) {
+		request('/api/ro/my/balances/:cointype', {}, callback, true, cointype);
+	}
+
+	readonlyDepositHistory (startDate = null, endDate = null, callback) {
+		let data = {};
+		if (startDate) {
+			data.startdate = startDate;
+		}
+		if (endDate) {
+			data.enddate = endDate;
+		}
+		request('/api/ro/my/deposits', data, callback, true);
+	}
+
+	readonlyWithdrawalHistory (startDate = null, endDate = null, callback) {
+		let data = {};
+		if (startDate) {
+			data.startdate = startDate;
+		}
+		if (endDate) {
+			data.enddate = endDate;
+		}
+		request('/api/ro/my/withdrawals', data, callback, true);
+	}
+
+	readonlyTransactionHistory (startDate = null, endDate = null, callback) {
+		let data = {};
+		if (startDate) {
+			data.startdate = startDate;
+		}
+		if (endDate) {
+			data.enddate = endDate;
+		}
+		request('/api/ro/my/transactions', data, callback, true);
+	}
+
+	readonlyCoinTransactionHistory (startDate = null, endDate = null, cointype, callback) {
+		let data = {};
+		if (startDate) {
+			data.startdate = startDate;
+		}
+		if (endDate) {
+			data.enddate = endDate;
+		}
+		request('/api/ro/my/transactions/:cointype', data, callback, true, cointype);
+	}
+
+	readonlyOpenTransactions (callback) {
+		request('/api/ro/my/transactions/open', {}, callback, true);
+	}
+
+	readonlyOpenCoinTransactions (cointype, callback) {
+		request('/api/ro/my/transactions/:cointype/open', {}, callback, true, cointype);
+	}
+
+	readonlySendReceiveTransactionHistory (callback) {
+		request('/api/ro/my/sendreceive', {}, callback, true);
+	}
+
+	readonlyAffiliatePayments (callback) {
+		request('/api/ro/my/affiliatepayments', {}, callback, true);
+	}
+
+	readonlyReferralPayments (callback) {
+		request('/api/ro/my/referralpayments', {}, callback, true);
+	}
+
 }
 
 export default coinspot;
