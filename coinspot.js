@@ -3,21 +3,12 @@ import { request as _request } from 'https';
 
 class Coinspot {
 
-	key = null;
-	secret = null;
-	readonlyKey = null;
-	readonlySecret = null;
-
-	mainAPI = false;
-	ReadonlyAPI = false;
-
-	validPaths = ['/pubapi/latest'];
-
 	constructor(key, secret, readonlyKey, readonlySecret) {
+		this. validPaths = ['/pubapi/latest'];
+
 		if (key && secret) {
 			this.key = key;
 			this.secret = secret;
-			mainAPI = true;
 
 			let mainPaths = [
 				'/api/orders',
@@ -40,7 +31,6 @@ class Coinspot {
 		if (readonlyKey && readonlySecret) {
 			this.readonlyKey = readonlyKey;
 			this.readonlySecret = readonlySecret;
-			ReadonlyAPI = true;
 
 			let readonlyPaths = [
 				'/api/ro/my/balances',

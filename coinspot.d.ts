@@ -3,17 +3,29 @@ interface ICallBack {
 }
 
 declare module 'coinspot-api' {
-    /**
-     * @param key
-     * @param secret
-     * @param readonlyKey
-     * @param readonlySecret
-    */
+
     class Coinspot {
+        /**
+            * @param key Full access API key
+            * @param secret Full access API secret
+            * @param readonlyKey Readonly API key
+            * @param readonlySecret Readonly API secret
+        */
         constructor(key? : string, secret? : string, readonlyKey? : string, readonlySecret? : string);
 
+        /**
+            * @param path Relative path for API request eg. '/api/my/coin/deposit'
+            * @returns true if the path is in the list of valid paths for the API key pairs available
+        */
         checkPath (path : string) : boolean;
 
+        /**
+         * @param path Relative path for API request eg. '/api/my/coin/deposit'
+         * @param postdata
+         * @param callback
+         * @param useReadonly Set to true for readonly API - Default false
+         * @param cointype Coin ticker eg. 'BTC' 'ETH' etc.
+         */
         request (path : string, postdata : any, callback : ICallBack, useReadonly? : boolean, cointype? : string) : void;
 
         latestPrices (callback : ICallBack) : void
